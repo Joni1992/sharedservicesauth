@@ -3,22 +3,29 @@
 \**********************************/
 var moment = require('moment')
 	, request = require('request')
-	, config = require('./config/config');
+	, config = require('./config/config')
+	, passport = require('passport');
+
+exports.initPassport = function() {
+	require('./passport')(passport);
+	return passport;
+}
 
 /* Authenticates user on login */
 exports.userAuthentication = userAuthentication;
-function userAuthentication(passport) {
-	passport.authenticate('celfinetSingleSignOn', function(err, user) {		    
+function userAuthentication(passport, username, password, callback) {
+	var userCredentials = {username: username, password: password};
+	passport.authenticate('celfinetSingleSignOn', function(err, user, info) {		    
 	    if (err) { 
 	    	var message = 'Something went wrong while processing the login information. Contact the administrator for more info.';
 	    	var resultObj = {auth: false, message: message};
-	    	return resultObj;
+	    	return callback(resultObj);
 	    }
 	    
 	    if (!user) { 
 	    	var message = 'The username or password provided are incorrect.'
 	    	var resultObj = {auth: false, message: message};
-	    	return resultObj;
+	    	return callback(resultObj);
 	    }
 
 	    /* 
@@ -31,27 +38,12 @@ function userAuthentication(passport) {
 	    var sessionTime = expireDate.valueOf() - issuedDate.valueOf();
 
 	    var resultObj = {auth: true, message: '', user: user, sessionTime: sessionTime};
-	    return resultObj;
-
-	    /*req.logIn(user, function(err) {
-	      	if (err) { 
-	      		return next(err); 
-	      	}
-
-	      	var issuedDate = moment(new Date(req.user[".issued"]));
-	      	var expireDate = moment(new Date(req.user[".expires"]));
-
-	      	var millisecondsToSessionExpire = expireDate.valueOf() - issuedDate.valueOf();
-
-	      	req.session.cookie.maxAge = millisecondsToSessionExpire;
-
-	      	return res.redirect('/');
-	    });*/
-	});	
+	    return callback(resultObj);
+	})(userCredentials);	
 }
 
 /* Logs the user out of the application */
-exports.logoutUser = function(tokenType, accessToken) {
+exports.logoutUser = function(tokenType, accessToken, callback) {
 
 	var authorization = tokenType + ' ' + accessToken;
 
@@ -67,9 +59,9 @@ exports.logoutUser = function(tokenType, accessToken) {
 
     request(options, function (err, result, bodyRes) {
         if(result.statusCode !== 200) {
-        	return false;
+        	return callback(false)
         }
 
-        return true;
+        return callback(true);
     });	
 }

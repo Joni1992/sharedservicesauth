@@ -1,8 +1,15 @@
 {
   "name": "sharedservicesauth",
   "version": "1.0.0",
-  "description": "This application is used to facilitate the communication between the Shared Services API and Passportjs",
-  "main": "passport.js",
+  "description": "Test",
+  "main": "authentication.js",
+  "dependencies": {
+    "moment": "^2.9.0",
+    "passport": "^0.2.1",
+    "querystring": "^0.2.0",
+    "request": "^2.53.0"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,15 +17,10 @@
     "type": "git",
     "url": "https://Joni1992@github.com/Joni1992/sharedservicesauth.git"
   },
-  "author": "Joao Machado",
+  "author": "joao",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Joni1992/sharedservicesauth/issues"
   },
-  "homepage": "https://github.com/Joni1992/sharedservicesauth",
-  "devDependencies": {
-    "moment": "^2.9.0",
-    "querystring": "^0.2.0",
-    "request": "^2.53.0"
-  }
+  "homepage": "https://github.com/Joni1992/sharedservicesauth"
 }

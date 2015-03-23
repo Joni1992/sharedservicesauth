@@ -16,10 +16,7 @@ module.exports = function (passport) {
   });
 
   // Custom strategy
-  passport.use(new CelfinetSingleSignOnStrategy({
-      usernameField: 'username',
-      passwordField: 'password'
-    },
+  passport.use(new CelfinetSingleSignOnStrategy(
     function(username, password, done) {      
       var locals = {};
 

@@ -2,8 +2,7 @@
  * Module dependencies.
  */
 var passport = require('passport-strategy')
-  , util = require('util')
-  , lookup = require('../utils/utils').lookup;
+  , util = require('util');
 
 
 /**
@@ -64,10 +63,9 @@ util.inherits(Strategy, passport.Strategy);
  * @param {Object} req
  * @api protected
  */
-Strategy.prototype.authenticate = function(req, options) {
-  options = options || {};
-  var username = lookup(req.body, this._usernameField) || lookup(req.query, this._usernameField);
-  var password = lookup(req.body, this._passwordField) || lookup(req.query, this._passwordField);
+Strategy.prototype.authenticate = function(userCredentials) {  
+  var username = userCredentials.username;
+  var password = userCredentials.password;
   
   if (!username || !password) {
     return this.fail({ message: options.badRequestMessage || 'Missing credentials' }, 400);
